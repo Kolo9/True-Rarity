@@ -1,6 +1,9 @@
 # True-Rarity
 True per-item rarity for [Loot (For Adventurers)](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7) and [More Loot A.K.A mLoot](https://etherscan.io/address/0x1dfe7Ca09e99d10835Bf73044a23B73Fc20623DF)
 
+each `out/true_rarity_{item_type}.json` file contains probabilities for each item of that type, even if the item is impossible.
+`out/true_rarity_condensed.json` contains probabilities for every *possible* item.
+
 ## Background & personal notes
 
 ### Rarity metrics
