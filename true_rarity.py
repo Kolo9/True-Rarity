@@ -370,10 +370,11 @@ def calc_true_rarity():
 
 
 if __name__ == "__main__":
-    calc_true_rarity()
+    # calc_true_rarity()
 
     # Verification per type: sum up probabiliies of all items per type
     # Expected: 1
+    total_items = 0
     for type in LootType:
         with open(
             "out/true_rarity_{type}.json".format(type=type.name.lower()), "r"
@@ -383,6 +384,7 @@ if __name__ == "__main__":
             for full_name in data:
                 for short_name in data[full_name]:
                     total_probability += data[full_name][short_name]
+                    total_items += 1
             print(
                 "{type}: {total_probability}".format(
                     type=type, total_probability=total_probability
@@ -391,6 +393,7 @@ if __name__ == "__main__":
 
     # Verification for condensed version: sum up probabiliies of all items
     # Expected: 8 (Since there are 8 items per bag)
+    possible_items = 0
     with open(
         "out/true_rarity_condensed.json".format(type=type.name.lower()), "r"
     ) as f:
@@ -399,6 +402,14 @@ if __name__ == "__main__":
         for full_name in data:
             for short_name in data[full_name]:
                 total_probability += data[full_name][short_name]
+                possible_items += 1
         print(
             "condensed: {total_probability}".format(total_probability=total_probability)
         )
+    print(
+        "Total items: {total_items}\nPossible items: {possible_items}({possible_items_percent:.2f}%)".format(
+            total_items=total_items,
+            possible_items=possible_items,
+            possible_items_percent=100 * possible_items / total_items,
+        )
+    )
