@@ -399,9 +399,9 @@ if __name__ == "__main__":
     ) as f:
         data = json.load(f)
         total_probability = 0
-        for full_name in data:
-            for short_name in data[full_name]:
-                total_probability += data[full_name][short_name]
+        for short_name in data:
+            for full_name in data[full_name]:
+                total_probability += data[short_name][full_name]
                 possible_items += 1
         print(
             "condensed: {total_probability}".format(total_probability=total_probability)
