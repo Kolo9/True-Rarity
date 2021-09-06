@@ -289,38 +289,47 @@ def optimal_crt(mods, remainders):
 def calc_true_rarity():
     true_rarity = {}
     for type in LootType:
-        true_rarity[type] = defaultdict(lambda: 0)
+        true_rarity[type] = {}
+        for option in options_by_type[type]:
+            true_rarity[type][option] = defaultdict(lambda: 0)
 
     for type in LootType:
         options = options_by_type[type]
         num_options = len(options)
-        for option in range(num_options):
+        for option_idx in range(num_options):
+            short_name = options[option_idx]
             for greatness in range(0, 15):
-                name = options[option]
-                result = optimal_crt([num_options, 21], [option, greatness])
-                true_rarity[type][name] += 1 / result[1] if result else 0
+                full_name = short_name
+                result = optimal_crt([num_options, 21], [option_idx, greatness])
+                true_rarity[type][short_name][full_name] += (
+                    1 / result[1] if result else 0
+                )
             for greatness in range(15, 19):
                 for suffix_idx in range(len(suffixes)):
-                    name = "{option} {suffix}".format(
-                        option=options[option], suffix=suffixes[suffix_idx]
+                    full_name = "{option} {suffix}".format(
+                        option=options[option_idx], suffix=suffixes[suffix_idx]
                     )
                     result = optimal_crt(
                         [num_options, 21, len(suffixes)],
-                        [option, greatness, suffix_idx],
+                        [option_idx, greatness, suffix_idx],
                     )
-                    true_rarity[type][name] += 1 / result[1] if result else 0
+                    true_rarity[type][short_name][full_name] += (
+                        1 / result[1] if result else 0
+                    )
             for greatness in range(19, 21):
                 for suffix_idx in range(len(suffixes)):
                     for name_prefix_idx in range(len(name_prefixes)):
                         for name_suffix_idx in range(len(name_suffixes)):
-                            name = "{name_prefix} {name_suffix} {name} {suffix}".format(
-                                name_prefix=name_prefixes[name_prefix_idx],
-                                name_suffix=name_suffixes[name_suffix_idx],
-                                name=options[option],
-                                suffix=suffixes[suffix_idx],
+                            full_name = (
+                                "{name_prefix} {name_suffix} {name} {suffix}".format(
+                                    name_prefix=name_prefixes[name_prefix_idx],
+                                    name_suffix=name_suffixes[name_suffix_idx],
+                                    name=options[option_idx],
+                                    suffix=suffixes[suffix_idx],
+                                )
                             )
                             if greatness == 20:
-                                name += " +1"
+                                full_name += " +1"
                             result = optimal_crt(
                                 [
                                     num_options,
@@ -330,30 +339,66 @@ def calc_true_rarity():
                                     len(name_suffixes),
                                 ],
                                 [
-                                    option,
+                                    option_idx,
                                     greatness,
                                     suffix_idx,
                                     name_prefix_idx,
                                     name_suffix_idx,
                                 ],
                             )
-                            true_rarity[type][name] += 1 / result[1] if result else 0
-        with open("out/true_rarity_{type}.json".format(type=type.name.lower()), "w") as f:
+                            true_rarity[type][short_name][full_name] += (
+                                1 / result[1] if result else 0
+                            )
+        with open(
+            "out/true_rarity_{type}.json".format(type=type.name.lower()), "w"
+        ) as f:
             json.dump(true_rarity[type], f, indent=4)
+
+    true_rarity_condensed = {}
+    for type in true_rarity:
+        for short_name in true_rarity[type]:
+            true_rarity_condensed[short_name] = {}
+            for full_name in true_rarity[type][short_name]:
+                if true_rarity[type][short_name][full_name]:
+                    true_rarity_condensed[short_name][full_name] = true_rarity[type][
+                        short_name
+                    ][full_name]
+    with open(
+        "out/true_rarity_condensed.json".format(type=type.name.lower()), "w"
+    ) as f:
+        json.dump(true_rarity_condensed, f, indent=4)
 
 
 if __name__ == "__main__":
     calc_true_rarity()
 
-    # Verification: sum up probabiliies of all items
+    # Verification per type: sum up probabiliies of all items per type
+    # Expected: 1
     for type in LootType:
-        with open("out/true_rarity_{type}.json".format(type=type.name.lower()), "r") as f:
+        with open(
+            "out/true_rarity_{type}.json".format(type=type.name.lower()), "r"
+        ) as f:
             data = json.load(f)
             total_probability = 0
-            for v in data:
-                total_probability += data[v]
+            for full_name in data:
+                for short_name in data[full_name]:
+                    total_probability += data[full_name][short_name]
             print(
                 "{type}: {total_probability}".format(
                     type=type, total_probability=total_probability
                 )
             )
+
+    # Verification for condensed version: sum up probabiliies of all items
+    # Expected: 8 (Since there are 8 items per bag)
+    with open(
+        "out/true_rarity_condensed.json".format(type=type.name.lower()), "r"
+    ) as f:
+        data = json.load(f)
+        total_probability = 0
+        for full_name in data:
+            for short_name in data[full_name]:
+                total_probability += data[full_name][short_name]
+        print(
+            "condensed: {total_probability}".format(total_probability=total_probability)
+        )
