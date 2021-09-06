@@ -9,7 +9,7 @@ The community currently (2021-09-06) tends to judge bags based on a few differen
 
 1 and 2 are closely related, and the "true rarity" data in this repo is meant to complement those. Since mLoot is perpetually releasing new bags, an item that's rare today may not be that rare soon.  For example:
 "Blight Peak Shoes of Perfection +1" are currently 1/1, but really are expected to come up every ~116k bags. It just so happened there was only 1 in the first 1.3m. Next will be in 1400184.  
-"True rarity" doesn't care about which mLoot bags are released today, and instead shows that actual rarity of each item, assuming infinite bags.
+**"True rarity" doesn't care about which mLoot bags are released today, and instead shows that actual rarity of each item, assuming infinite bags.**
 
 This repo does not focus on any `greatness` calculations (3), because AFAIA, `greatness` is not directly used by any derivatives.
 
