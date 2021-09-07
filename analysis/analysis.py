@@ -1,13 +1,14 @@
 from enum import Enum
 import json
 import matplotlib.pyplot as plt
-import numpy as np
 import os
 import pandas as pd
 import re
 import sys
 from collections import defaultdict
 from heapq import heapify, heappush, heappop
+
+plt.style.use('dark_background')
 
 # normal: base item
 # good: base item with suffix
@@ -72,8 +73,6 @@ def analyze_by_item_and_tier(data):
             great_plus_prob,
         ]
         if base_item == LAST_ITEM_PER_LOOT_TYPE[cur_loot_type]:
-            if cur_loot_type != LootType(len(LootType)):
-                cur_loot_type = LootType(cur_loot_type.value + 1)
             figure = df.plot(
                 x="Base Item",
                 kind="bar",
@@ -93,6 +92,8 @@ def analyze_by_item_and_tier(data):
             )
             # Clear the dataframe.
             df = df.iloc[0:0]
+            if cur_loot_type != LootType(len(LootType)):
+                cur_loot_type = LootType(cur_loot_type.value + 1)
     # plt.show()
 
 
