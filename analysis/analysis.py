@@ -1,10 +1,13 @@
 import json
-from matplotlib import colors
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
 import sys
+from collections import defaultdict
+from heapq import heapify, heappush, heappop
+
+from pandas.core import base
 
 # normal: base item
 # good: base item with suffix
@@ -88,7 +91,26 @@ def analyze_by_item_and_rarity(data):
     # plt.show()
 
 
+def analyze_rarest_items(data):
+    prob_min_heap = []
+    unique_probs = set()
+    heapify(prob_min_heap)
+    items_per_prob = defaultdict(lambda:[])
+
+    for base_item in data:
+        for specific_item in data[base_item]:
+            prob = data[base_item][specific_item]
+            items_per_prob[prob].append(specific_item)
+            if prob not in unique_probs:
+                heappush(prob_min_heap, prob)
+                unique_probs.add(prob)
+    while len(prob_min_heap):
+        prob = heappop(prob_min_heap)
+        print("1/{}: {}".format(int(1/prob), items_per_prob[prob]))
+
+
 if __name__ == "__main__":
     with open("out/true_rarity_condensed.json", "r") as f:
         data = json.load(f)
     analyze_by_item_and_rarity(data)
+    analyze_rarest_items(data)
