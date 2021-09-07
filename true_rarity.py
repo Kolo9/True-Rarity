@@ -370,7 +370,7 @@ def calc_true_rarity():
 
 
 if __name__ == "__main__":
-    # calc_true_rarity()
+    calc_true_rarity()
 
     # Verification per type: sum up probabiliies of all items per type
     # Expected: 1
@@ -394,9 +394,7 @@ if __name__ == "__main__":
     # Verification for condensed version: sum up probabiliies of all items
     # Expected: 8 (Since there are 8 items per bag)
     possible_items = 0
-    with open(
-        "out/true_rarity_condensed.json".format(type=type.name.lower()), "r"
-    ) as f:
+    with open("out/true_rarity_condensed.json", "r") as f:
         data = json.load(f)
         total_probability = 0
         for short_name in data:
