@@ -9,13 +9,10 @@ import sys
 from collections import defaultdict
 from heapq import heapify, heappush, heappop
 
-from pandas.core import base
-
 # normal: base item
 # good: base item with suffix
 # great: base item with prefix and sufix
 # great+: Like great, but +1
-
 
 class LootType(Enum):
     WEAPON = 1
@@ -41,7 +38,7 @@ LAST_ITEM_PER_LOOT_TYPE = {
 }
 
 
-def analyze_by_item_and_rarity(data):
+def analyze_by_item_and_tier(data):
     df = pd.DataFrame(
         columns=[
             "Base Item",
@@ -58,8 +55,7 @@ def analyze_by_item_and_rarity(data):
         good_prob = 0
         great_prob = 0
         great_plus_prob = 0
-        for specific_item in data[base_item]:
-            prob = data[base_item][specific_item]
+        for specific_item, prob in data[base_item].items():
             if specific_item.endswith("+1"):
                 great_plus_prob += prob
             elif not specific_item.startswith(base_item):
@@ -129,10 +125,8 @@ def find_item_sets(data):
     set_piece_count = defaultdict(lambda: set())
     cur_loot_type = LootType(1)
     for base_item in data:
-        for specific_item in data[base_item]:
-            if data[base_item][specific_item] > 0 and not specific_item.startswith(
-                base_item
-            ):
+        for specific_item, prob in data[base_item].items():
+            if prob > 0 and not specific_item.startswith(base_item):
                 match = re.match(r"^(\S+ \S+).*( of .*?( \+1)?)$", specific_item)
                 set_piece_count[match.group(1) + match.group(2)].add(cur_loot_type)
         if base_item == LAST_ITEM_PER_LOOT_TYPE[cur_loot_type]:
@@ -148,6 +142,6 @@ def find_item_sets(data):
 if __name__ == "__main__":
     with open("out/true_rarity_condensed.json", "r") as f:
         data = json.load(f)
-    # analyze_by_item_and_rarity(data)
-    # analyze_rarest_items(data)
+    analyze_by_item_and_tier(data)
+    analyze_rarest_items(data)
     find_item_sets(data)
