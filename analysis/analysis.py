@@ -104,9 +104,12 @@ def analyze_rarest_items(data):
             if prob not in unique_probs:
                 heappush(prob_min_heap, prob)
                 unique_probs.add(prob)
+    item_count = 0
     while len(prob_min_heap):
         prob = heappop(prob_min_heap)
-        print("1/{}: {}".format(int(1/prob), items_per_prob[prob]))
+        print("{} items expected to show up every {} bags".format(len(items_per_prob[prob]), int(1/prob)))
+        item_count += len(items_per_prob[prob])
+    print("total items: {}".format(item_count))
 
 
 if __name__ == "__main__":
