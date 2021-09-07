@@ -4,6 +4,17 @@ True per-item rarity for [Loot (For Adventurers)](https://etherscan.io/address/0
   * each `out/true_rarity_{item_type}.json` file contains probabilities for each item of that type, even if the item is impossible.
   * `out/true_rarity_condensed.json` contains probabilities for every *possible* item.
 
+## Item probabilities by tier:
+
+![Weapon probability by tier](analysis/weapon.png?raw=true "Weapon")
+![Chest probability by tier](analysis/chest.png?raw=true "Chest")
+![Head probability by tier](analysis/head.png?raw=true "Head")
+![Waist probability by tier](analysis/waist.png?raw=true "Waist")
+![Foot probability by tier](analysis/foot.png?raw=true "Foot")
+![Hand probability by tier](analysis/hand.png?raw=true "Hand")
+![Neck probability by tier](analysis/neck.png?raw=true "Neck")
+![Ring probability by tier](analysis/ring.png?raw=true "Ring")
+
 ## Background & personal notes
 
 ### Rarity metrics
