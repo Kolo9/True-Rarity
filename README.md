@@ -5,15 +5,16 @@ True per-item rarity for [Loot (For Adventurers)](https://etherscan.io/address/0
   * `out/true_rarity_condensed.json` contains probabilities for every *possible* item.
 
 ## Item probabilities by tier:
+<img src="analysis/probability/weapon.png?raw=true" width="400"> <img src="analysis/probability/chest.png?raw=true" width="400">
+<img src="analysis/probability/head.png?raw=true" width="400"> <img src="analysis/probability/waist.png?raw=true" width="400">
+<img src="analysis/probability/foot.png?raw=true" width="400"> <img src="analysis/probability/hand.png?raw=true" width="400">
+<img src="analysis/probability/neck.png?raw=true" width="400"> <img src="analysis/probability/ring.png?raw=true" width="400">
 
-![Weapon probability by tier](analysis/weapon.png?raw=true "Weapon")
-![Chest probability by tier](analysis/chest.png?raw=true "Chest")
-![Head probability by tier](analysis/head.png?raw=true "Head")
-![Waist probability by tier](analysis/waist.png?raw=true "Waist")
-![Foot probability by tier](analysis/foot.png?raw=true "Foot")
-![Hand probability by tier](analysis/hand.png?raw=true "Hand")
-![Neck probability by tier](analysis/neck.png?raw=true "Neck")
-![Ring probability by tier](analysis/ring.png?raw=true "Ring")
+## Item counts by tier:
+<img src="analysis/count/weapon.png?raw=true" width="400"> <img src="analysis/count/chest.png?raw=true" width="400">
+<img src="analysis/count/head.png?raw=true" width="400"> <img src="analysis/count/waist.png?raw=true" width="400">
+<img src="analysis/count/foot.png?raw=true" width="400"> <img src="analysis/count/hand.png?raw=true" width="400">
+<img src="analysis/count/neck.png?raw=true" width="400"> <img src="analysis/count/ring.png?raw=true" width="400">
 
 ## Background & personal notes
 

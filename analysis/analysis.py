@@ -8,12 +8,13 @@ import sys
 from collections import defaultdict
 from heapq import heapify, heappush, heappop
 
-plt.style.use('dark_background')
+plt.style.use("dark_background")
 
 # normal: base item
 # good: base item with suffix
 # great: base item with prefix and sufix
 # great+: Like great, but +1
+
 
 class LootType(Enum):
     WEAPON = 1
@@ -40,13 +41,44 @@ LAST_ITEM_PER_LOOT_TYPE = {
 
 
 def analyze_by_item_and_tier(data):
-    df = pd.DataFrame(
+    def plot(df, metric):
+        ax = df.plot(
+            x="Base Item",
+            ylabel=metric.title(),
+            kind="bar",
+            stacked=True,
+            title="Tier {} distribution by item ({})".format(
+                metric.lower(), cur_loot_type.name.lower()
+            ),
+            color=["grey", "green", "blue", "purple"],
+        )
+        plt.tight_layout()
+        # reverse legend order.
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(handles[::-1], labels[::-1], loc="lower right")
+        ax.get_figure().savefig(
+            os.path.join(
+                sys.path[0],
+                "{}/{}.png".format(metric.lower(), cur_loot_type.name.lower()),
+            )
+        )
+
+    df_prob = pd.DataFrame(
         columns=[
             "Base Item",
-            "Normal Prob",
-            "Good Prob (sfx)",
-            "Great Prob (pfx+sfx)",
-            "Great+ Prob (pfx+sfx+1)",
+            "Normal",
+            "Good (sfx)",
+            "Great (pfx+sfx)",
+            "Great+ (pfx+sfx+1)",
+        ]
+    )
+    df_count = pd.DataFrame(
+        columns=[
+            "Base Item",
+            "Normal",
+            "Good (sfx)",
+            "Great (pfx+sfx)",
+            "Great+ (pfx+sfx+1)",
         ]
     )
     cur_loot_type = LootType(1)
@@ -56,45 +88,45 @@ def analyze_by_item_and_tier(data):
         good_prob = 0
         great_prob = 0
         great_plus_prob = 0
+        normal_count = 0
+        good_count = 0
+        great_count = 0
+        great_plus_count = 0
         for specific_item, prob in data[base_item].items():
             if specific_item.endswith("+1"):
                 great_plus_prob += prob
+                great_plus_count += 1
             elif not specific_item.startswith(base_item):
                 great_prob += prob
+                great_count += 1
             elif " of " in specific_item:
                 good_prob += prob
+                good_count += 1
             else:
                 normal_prob += prob
-        df.loc[df.shape[0]] = [
+                normal_count += 1
+        df_prob.loc[df_prob.shape[0]] = [
             base_item,
             normal_prob,
             good_prob,
             great_prob,
             great_plus_prob,
         ]
+        df_count.loc[df_count.shape[0]] = [
+            base_item,
+            normal_count,
+            good_count,
+            great_count,
+            great_plus_count,
+        ]
         if base_item == LAST_ITEM_PER_LOOT_TYPE[cur_loot_type]:
-            figure = df.plot(
-                x="Base Item",
-                kind="bar",
-                stacked=True,
-                title="Tier probability distribution by item ({})".format(
-                    cur_loot_type.name.lower()
-                ),
-                color=["grey", "green", "blue", "purple"],
-            ).get_figure()
-            plt.tight_layout()
-            plt.legend(loc="lower right")
-            figure.savefig(
-                os.path.join(
-                    sys.path[0],
-                    "{}.png".format(cur_loot_type.name.lower()),
-                )
-            )
-            # Clear the dataframe.
-            df = df.iloc[0:0]
+            plot(df_prob, "probability")
+            plot(df_count, "count")
+            # Clear the dataframes.
+            df_prob = df_prob.iloc[0:0]
+            df_count = df_count.iloc[0:0]
             if cur_loot_type != LootType(len(LootType)):
                 cur_loot_type = LootType(cur_loot_type.value + 1)
-    # plt.show()
 
 
 def analyze_rarest_items(data):
