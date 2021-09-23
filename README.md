@@ -4,6 +4,24 @@ True per-item rarity for [Loot (For Adventurers)](https://etherscan.io/address/0
   * each `out/true_rarity_{item_type}.json` file contains probabilities for each item of that type, even if the item is impossible.
   * `out/true_rarity_condensed.json` contains probabilities for every *possible* item.
 
+Overall, there are 12 unique probabilities of items:
+| Tier | Probability |
+| ---- | ----------- |
+| 0    | 23.8095%    |
+| 1    | 14.2857%    |
+| 2    | 4.7619%     |
+| 3    | 3.9683%     |
+| 4    | 0.5952%     |
+| 5    | 0.2976%     |
+| 6    | 0.2381%     |
+| 7    | 0.1984%     |
+| 8    | 0.1190%     |
+| 9    | 0.0992%     |
+| 10   | 0.0595%     |
+| 11   | 0.0043%     |
+| 12   | 0.0009%     |     
+
+
 ## Item probabilities by tier:
 <img src="analysis/probability/weapon.png?raw=true" width="400"> <img src="analysis/probability/chest.png?raw=true" width="400">
 <img src="analysis/probability/head.png?raw=true" width="400"> <img src="analysis/probability/waist.png?raw=true" width="400">
